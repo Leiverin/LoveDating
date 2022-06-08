@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/view_card"
+    android:gravity="center">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_margin="16dp"
+        app:cardElevation="6dp"
+        app:cardCornerRadius="8dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_card"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/brewed_epresso"
+                app:shapeAppearanceOverlay="@style/ShapeImageCard"
+                android:backgroundTint="@color/white"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <ImageButton
+                    android:id="@+id/imb_delete"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginRight="20dp"
+                    android:elevation="7dp"
+                    android:src="@drawable/ic_baseline_clear"
+                    android:padding="10dp"
+                    android:background="@drawable/round_button_with_border"
+                    />
+
+                <ImageButton
+                    android:id="@+id/imb_message"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:elevation="7dp"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_message"
+                    android:background="@drawable/round_button_with_border"
+                    />
+
+
+                <ImageButton
+                    android:id="@+id/imb_like"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:elevation="7dp"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_favorite"
+                    android:background="@drawable/round_button_with_border"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NoActionbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="ViewMarginContent">
+        <item name="android:background">#EDEBEB</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Theme.MatlhShop.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.MalthShop.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ImageRadius">
+        <item name="cornerSize">14dp</item>
+    </style>
+</resources>

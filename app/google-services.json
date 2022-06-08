@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "321199532391",
+    "project_id": "lovedatingproject",
+    "storage_bucket": "lovedatingproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:321199532391:android:6fe9ae6bd8e1c2a6fb27c2",
+        "android_client_info": {
+          "package_name": "com.project.lovedatingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "321199532391-m9m3ql5pmvboe7udut6he0cj584n0t92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.lovedatingapp",
+            "certificate_hash": "32211ad01382c73b2855a7f715b39e3406dd9215"
+          }
+        },
+        {
+          "client_id": "321199532391-pkbdev6o7ogubv8qkmv6rthg32euh8he.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH8O3SfgBXT7yF9UxnzI8RQ36F57Eubgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "321199532391-pkbdev6o7ogubv8qkmv6rthg32euh8he.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
