@@ -1,6 +1,7 @@
 package com.project.lovedatingapp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.gson.Gson;
 import com.project.lovedatingapp.R;
 import com.project.lovedatingapp.interfaces.IOnClickCard;
 import com.project.lovedatingapp.models.User;
@@ -25,6 +27,11 @@ public class SwipeAdapter extends BaseAdapter {
         this.mContext = mContext;
         this.mListUser = mListUser;
         this.onClickCard = onClickCard;
+    }
+
+    public void setListUser(List<User> mListUser){
+        this.mListUser = mListUser;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,7 +71,10 @@ public class SwipeAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         User user = mListUser.get(i);
-//        Glide.with(mContext).load(user.getImages().get(0)).into(holder.imgCard);
+        if(user.getListImage().size() != 0 && user.getListImage() != null){
+            Log.d("zzzzz", new Gson().toJson(user.getListImage()));
+            Glide.with(mContext).load(user.getListImage().get(0).getUrl()).into(holder.imgCard);
+        }
         holder.imbLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

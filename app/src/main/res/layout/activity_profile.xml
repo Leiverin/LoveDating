@@ -57,10 +57,10 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:id="@+id/tv_title"
+                                    android:id="@+id/tv_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Lương Văn Tuấn Anh,"
+                                    android:text="None name"
                                     android:textColor="@color/color_title"
                                     android:textSize="25dp"
                                     android:textStyle="bold" />
@@ -70,20 +70,33 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="8dp"
-                                    android:text="19"
+                                    android:text="None age"
                                     android:textColor="@color/color_title"
                                     android:textSize="25dp"
                                     android:textStyle="bold" />
                             </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:id="@+id/tv_address"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:drawableStart="@drawable/ic_baseline_location_on_24"
+                                    android:text="None"
+                                    android:textSize="18dp" />
+                                <TextView
+                                    android:id="@+id/tv_gender"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text="gender"
+                                    android:textColor="@color/pink"
+                                    android:layout_marginLeft="16dp"
+                                    android:textSize="18dp" />
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/tv_address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:drawableStart="@drawable/ic_baseline_location_on_24"
-                                android:text="Chương Mỹ"
-                                android:textSize="18dp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -160,13 +173,15 @@
                                     android:text="Quê hương"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_address_detail"
+                                <EditText
+                                    android:id="@+id/ed_address_detail"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="Chương Mỹ"
-                                    android:textSize="18dp" />
+                                    android:hint="Hà Nội, Thái Bình, ..."
+                                    android:textSize="18dp"
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
@@ -193,13 +208,15 @@
                                     android:text="Tìm kiếm"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_find"
+                                <EditText
+                                    android:id="@+id/ed_find"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="Tình yêu"
-                                    android:textSize="18dp" />
+                                    android:hint="Love, Friend, ..."
+                                    android:textSize="18dp"
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
@@ -226,13 +243,15 @@
                                     android:text="Tình trạng quan hệ"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_status_yourself"
+                                <EditText
+                                    android:id="@+id/ed_status_yourself"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="Độc thân"
-                                    android:textSize="18dp" />
+                                    android:textSize="18dp"
+                                    android:hint="Độc thân,..."
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
@@ -256,16 +275,18 @@
                                     android:layout_height="wrap_content"
                                     android:drawableLeft="@drawable/ic_baseline_home"
                                     android:drawablePadding="8dp"
-                                    android:text="Chiều cao"
+                                    android:text="Chiều cao (cm)"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_height"
+                                <EditText
+                                    android:id="@+id/ed_height"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="170cm"
-                                    android:textSize="18dp" />
+                                    android:hint="50,60,70,..."
+                                    android:textSize="18dp"
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
@@ -289,16 +310,18 @@
                                     android:layout_height="wrap_content"
                                     android:drawableLeft="@drawable/ic_baseline_home"
                                     android:drawablePadding="8dp"
-                                    android:text="Cân nặng"
+                                    android:text="Cân nặng(kg)"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_weight"
+                                <EditText
+                                    android:id="@+id/ed_weight"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="56kg"
-                                    android:textSize="18dp" />
+                                    android:hint="50,60,70,..."
+                                    android:textSize="18dp"
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
@@ -322,16 +345,18 @@
                                     android:layout_height="wrap_content"
                                     android:drawableLeft="@drawable/ic_baseline_home"
                                     android:drawablePadding="8dp"
-                                    android:text="Trình độ"
+                                    android:text="Trình độ (ĐH, CĐ)"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_level"
+                                <EditText
+                                    android:id="@+id/ed_level"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="Thạc sĩ"
-                                    android:textSize="18dp" />
+                                    android:hint="CĐ, ĐH"
+                                    android:textSize="18dp"
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
@@ -358,13 +383,15 @@
                                     android:text="Công việc"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_work"
+                                <EditText
+                                    android:id="@+id/ed_work"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="Junior Developer"
-                                    android:textSize="18dp" />
+                                    android:hint="Làm nông, ..."
+                                    android:textSize="18dp"
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
@@ -389,16 +416,18 @@
                                     android:layout_height="wrap_content"
                                     android:drawableLeft="@drawable/ic_baseline_home"
                                     android:drawablePadding="8dp"
-                                    android:text="Thu nhập"
+                                    android:text="Thu nhập($)"
                                     android:textSize="18dp" />
 
-                                <TextView
-                                    android:id="@+id/tv_salary"
+                                <EditText
+                                    android:id="@+id/ed_salary"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="end"
-                                    android:text="5000$"
-                                    android:textSize="18dp" />
+                                    android:hint="5000"
+                                    android:textSize="18dp"
+                                    android:background="@android:color/transparent"
+                                    />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>

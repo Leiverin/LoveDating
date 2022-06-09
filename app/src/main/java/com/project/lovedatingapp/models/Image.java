@@ -15,6 +15,10 @@ public class Image {
         this.url = url;
     }
 
+    public Image(String url) {
+        this.url = url;
+    }
+
     public Image(Uri uri) {
         this.uri = uri;
     }

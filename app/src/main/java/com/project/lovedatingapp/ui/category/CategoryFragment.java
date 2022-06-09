@@ -3,6 +3,7 @@ package com.project.lovedatingapp.ui.category;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import com.google.gson.Gson;
 import com.project.lovedatingapp.utils.Common;
 import com.project.lovedatingapp.adapters.UserAdapterCategory;
 import com.project.lovedatingapp.databinding.FragmentCategoryBinding;

@@ -19,4 +19,9 @@
     <style name="ImageRadius">
         <item name="cornerSize">14dp</item>
     </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down_dialog</item>
+    </style>
 </resources>

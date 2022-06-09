@@ -55,35 +55,20 @@ public class HomeFragment extends Fragment implements IOnClickCard {
         View root = binding.getRoot();
 
 
-        homeViewModel.getListImage().observe(getViewLifecycleOwner(), new Observer<List<Image>>() {
+        homeViewModel.getUser().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
-            public void onChanged(List<Image> images) {
-                Log.d("zzzzz", images.size()+"");
+            public void onChanged(List<User> users) {
+                if(users != null){
+                    mListUser = users;
+                    swipeAdapter.setListUser(users);
+                }
             }
         });
 
         mListUser = new ArrayList<>();
         kldCard = binding.kldCard;
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                    User user = snapshot.getValue(User.class);
-//                    assert user != null;
-//                    if (user.getId().equals(firebaseUser.getUid())) {
-//                        Common.user = user;
-//                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-
-            }
-        });
         swipeAdapter = new SwipeAdapter(getContext(), mListUser, this);
         kldCard.setAdapter(swipeAdapter);
         kldCard.setKolodaListener(new KolodaListener() {
@@ -147,13 +132,6 @@ public class HomeFragment extends Fragment implements IOnClickCard {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void getListUser(){
-        List<User> mListUser = new ArrayList<>();
-
-
-//        return mListUser;
     }
 
     @Override
