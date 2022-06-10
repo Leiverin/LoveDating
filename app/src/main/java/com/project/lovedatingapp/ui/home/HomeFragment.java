@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment implements IOnClickCard {
             public void onChanged(List<User> users) {
                 if(users != null){
                     mListUser = users;
+                    Log.d("zzzz", new Gson().toJson(users));
                     swipeAdapter.setListUser(users);
                 }
             }
