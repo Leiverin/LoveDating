@@ -72,7 +72,6 @@ public class SwipeAdapter extends BaseAdapter {
         }
         User user = mListUser.get(i);
         if(user.getListImage().size() != 0 && user.getListImage() != null){
-            Log.d("zzzzzz", user.getListImage().get(0).getUrl());
             Glide.with(mContext).load(user.getListImage().get(0).getUrl()).into(holder.imgCard);
         }
         holder.imbLike.setOnClickListener(new View.OnClickListener() {

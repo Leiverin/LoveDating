@@ -121,11 +121,11 @@
                             app:cardCornerRadius="16dp">
 
                             <EditText
-                                android:id="@+id/tv_introduce"
+                                android:id="@+id/ed_introduce"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@android:drawable/screen_background_light_transparent"
-                                android:hint="Tôi là fuck boy Chương Mỹ"
+                                android:hint="Nhập giới thiệu"
                                 android:inputType="text"
                                 android:lines="6"
                                 android:maxLines="6"

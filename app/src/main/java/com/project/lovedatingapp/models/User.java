@@ -1,8 +1,11 @@
 package com.project.lovedatingapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class User {
+public class User implements Parcelable {
     private String id;
     private String username;
     private String password;
@@ -17,6 +20,7 @@ public class User {
     private String height;
     private String weight;
     private String level;
+    private String introduce;
     private String work;
     private String salary;
     private List<Image> mListImage;
@@ -33,7 +37,7 @@ public class User {
         this.mListImage = mListImage;
     }
 
-    public User(String id, String username, String password, String email, String fullName, String status, int age, String gender, String search, String address, String objectFind, String height, String weight, String level, String work, String salary, List<Image> mListImage) {
+    public User(String id, String username, String password, String email, String fullName, String status, int age, String gender, String search, String address, String objectFind, String height, String weight, String level, String introduce, String work, String salary, List<Image> mListImage) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -48,6 +52,7 @@ public class User {
         this.height = height;
         this.weight = weight;
         this.level = level;
+        this.introduce = introduce;
         this.work = work;
         this.salary = salary;
         this.mListImage = mListImage;
@@ -63,6 +68,38 @@ public class User {
         this.age = age;
         this.search=search;
     }
+
+    protected User(Parcel in) {
+        id = in.readString();
+        username = in.readString();
+        password = in.readString();
+        email = in.readString();
+        fullName = in.readString();
+        status = in.readString();
+        age = in.readInt();
+        gender = in.readString();
+        search = in.readString();
+        address = in.readString();
+        objectFind = in.readString();
+        height = in.readString();
+        weight = in.readString();
+        level = in.readString();
+        work = in.readString();
+        salary = in.readString();
+        introduce = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -192,11 +229,46 @@ public class User {
         this.gender = gender;
     }
 
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+
     public List<Image> getListImage() {
         return mListImage;
     }
 
     public void setListImage(List<Image> mListImage) {
         this.mListImage = mListImage;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(username);
+        parcel.writeString(password);
+        parcel.writeString(email);
+        parcel.writeString(fullName);
+        parcel.writeString(status);
+        parcel.writeInt(age);
+        parcel.writeString(gender);
+        parcel.writeString(search);
+        parcel.writeString(address);
+        parcel.writeString(objectFind);
+        parcel.writeString(height);
+        parcel.writeString(weight);
+        parcel.writeString(level);
+        parcel.writeString(work);
+        parcel.writeString(salary);
+        parcel.writeString(introduce);
     }
 }

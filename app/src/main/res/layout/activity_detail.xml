@@ -16,6 +16,7 @@
             android:orientation="vertical"
             >
             <ImageView
+                android:id="@+id/img_user"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:src="@drawable/brewed_epresso"
@@ -46,7 +47,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/tv_title"
+                                android:id="@+id/tv_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Lương Văn Tuấn Anh,"
@@ -96,12 +97,11 @@
                         android:layout_marginTop="8dp"
                         app:cardCornerRadius="16dp">
 
-                        <EditText
+                        <TextView
                             android:id="@+id/tv_introduce"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:drawable/screen_background_light_transparent"
-                            android:hint="Tôi là fuck boy Chương Mỹ"
                             android:inputType="text"
                             android:lines="6"
                             android:maxLines="6"

@@ -43,8 +43,6 @@ public class HomeFragment extends Fragment implements IOnClickCard {
     private List<User> mListUser;
     private SwipeAdapter swipeAdapter;
     private Koloda kldCard;
-    private DatabaseReference reference;
-    private FirebaseUser firebaseUser;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +58,6 @@ public class HomeFragment extends Fragment implements IOnClickCard {
             public void onChanged(List<User> users) {
                 if(users != null){
                     mListUser = users;
-                    Log.d("zzzz", new Gson().toJson(users));
                     swipeAdapter.setListUser(users);
                 }
             }
@@ -106,6 +103,8 @@ public class HomeFragment extends Fragment implements IOnClickCard {
             @Override
             public void onCardSingleTap(int i) {
                 Intent intent = new Intent(getContext(), DetailActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_ID_USER, mListUser.get(i+1).getId());
+                intent.putExtra(DetailActivity.EXTRA_URL_IMAGE, mListUser.get(i+1).getListImage().get(0).getUrl());
                 startActivity(intent);
             }
 
@@ -147,6 +146,6 @@ public class HomeFragment extends Fragment implements IOnClickCard {
 
     @Override
     public void onClickBtnDelete(User user) {
-
+        kldCard.onButtonClick(false);
     }
 }

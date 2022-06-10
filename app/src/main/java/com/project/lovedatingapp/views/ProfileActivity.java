@@ -108,6 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
                 User user = snapshot.getValue(User.class);
                 if(user != null){
                     binding.tvName.setText(user.getFullName());
+                    binding.edIntroduce.setText(user.getIntroduce());
                     binding.tvGender.setText(user.getGender());
                     binding.tvAge.setText(user.getAge()+"");
                     binding.tvAddress.setText(user.getAddress());
@@ -120,7 +121,6 @@ public class ProfileActivity extends AppCompatActivity {
                     binding.edWork.setText(user.getWork());
                     binding.edStatusYourself.setText(user.getStatus());
                 }
-
             }
 
             @Override
@@ -138,7 +138,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void OnClickImage(int position, Image image) {
                 for(int i = 0; i < mListImages.size() - 6; i++){
-                    Log.d("zzz", "Run here");
                     if (image.getId() == mListImages.get(i).getId()) {
                         imageSelected = image;
                         isAlreadyExist = true;
@@ -162,6 +161,7 @@ public class ProfileActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot snapshot) {
                             HashMap<String, Object> map = new HashMap<>();
                             String fullName = binding.tvName.getText().toString();
+                            String introduce = binding.edIntroduce.getText().toString();
                             String address = binding.edAddressDetail.getText().toString();
                             String objectFind = binding.edFind.getText().toString();
                             String status = binding.edStatusYourself.getText().toString();
@@ -173,6 +173,7 @@ public class ProfileActivity extends AppCompatActivity {
                             String gender = binding.tvGender.getText().toString();
 
                             checkNullVariable(map, "fullName", fullName);
+                            checkNullVariable(map, "introduce", introduce);
                             checkNullVariable(map, "address", address);
                             checkNullVariable(map, "objectFind", objectFind);
                             checkNullVariable(map, "status", status);
