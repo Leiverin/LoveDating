@@ -7,5 +7,5 @@ import java.util.List;
 
 public class Common {
     public static User user;
-    public static List<Image> mListImage;
+    public static List<User> mListUserCategory;
 }

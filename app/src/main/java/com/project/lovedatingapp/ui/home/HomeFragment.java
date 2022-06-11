@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment implements IOnClickCard {
                 if(users != null){
                     mListUser = users;
                     swipeAdapter.setListUser(users);
+                    Common.mListUserCategory = users;
                 }
             }
         });

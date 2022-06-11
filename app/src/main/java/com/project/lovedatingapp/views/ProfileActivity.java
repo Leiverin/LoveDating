@@ -219,7 +219,6 @@ public class ProfileActivity extends AppCompatActivity {
                     mListImages.add(0, image);
                 }
                 mListImages.addAll(mListImageDTB);
-                Common.mListImage = mListImages;
                 adapter.notifyDataSetChanged();
             }
 
