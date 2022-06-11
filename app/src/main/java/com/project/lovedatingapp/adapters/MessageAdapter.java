@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,11 +64,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(@NonNull @NotNull MessageAdapter.MessageViewHolder holder, int position) {
          Chat chat=list.get(position);
          holder.txtShowMessage.setText(chat.getMessage());
-//         if(imageURL.equals("default")){
-//             holder.circleImage.setImageResource(R.mipmap.ic_launcher);
-//         }else {
-//             Glide.with(context).load(imageURL).into(holder.circleImage);
-//         }
+         if(imageURL.equals("default")){
+             holder.circleImage.setImageResource(R.mipmap.ic_launcher);
+         }else {
+             Glide.with(context).load(imageURL).into(holder.circleImage);
+         }
         //check for last message
         holder.item_chat.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

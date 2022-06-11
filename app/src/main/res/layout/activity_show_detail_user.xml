@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.ShowDetailUserActivity">
+    tools:context=".ShowDetailUserActivity">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="500dp">
@@ -70,11 +70,21 @@
             android:id="@+id/txtAge"
             android:text="Age"
             android:fontFamily="@font/chunk_five"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtGender"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/custom_font"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Gender"
+            android:textColor="@color/pink"
+            android:textSize="18sp" />
     </LinearLayout>
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"

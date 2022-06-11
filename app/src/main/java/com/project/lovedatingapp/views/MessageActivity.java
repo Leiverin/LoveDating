@@ -1,8 +1,10 @@
 package com.project.lovedatingapp.views;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -10,11 +12,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,17 +32,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.project.lovedatingapp.R;
 import com.project.lovedatingapp.adapters.MessageAdapter;
 import com.project.lovedatingapp.models.Chat;
 import com.project.lovedatingapp.models.User;
-import com.project.lovedatingapp.utils.Common;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -54,8 +67,8 @@ public class MessageActivity extends AppCompatActivity {
     private List<Chat> list;
     private MessageAdapter adapter;
     ValueEventListener seenListener;
-    private static final int PICK_IMAGE=1;
-
+    String userId;
+    public static final String KEY="GET";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +87,7 @@ public class MessageActivity extends AppCompatActivity {
         setSupportActionBar(toobar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         toobar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,17 +95,11 @@ public class MessageActivity extends AppCompatActivity {
                 finish();
             }
         });
-        btnImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               selectImage();
-            }
-        });
+
 
         rvSend.setHasFixedSize(true);
-
         intent = getIntent();
-        String userId = intent.getStringExtra("userId");
+        userId= intent.getStringExtra(KEY);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -109,18 +117,19 @@ public class MessageActivity extends AppCompatActivity {
         });
 
 
+
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 txtUsername.setText(user.getUsername());
-//                if(user.getImageURL().equals("default")){
-//                    circleImage.setImageResource(R.mipmap.ic_launcher);
-//                }else {
-//                    Gilde.with(MessageActivity.this).load(user.getImageURL()).into(circleImage);
-//                }
-                readMessage(firebaseUser.getUid(), userId, Common.mListImage.get(0).getUrl());
+                if(user.getListImage().get(0).getUrl().equals("default")){
+                    circleImage.setImageResource(R.mipmap.ic_launcher);
+                }else {
+                    Glide.with(MessageActivity.this).load(user.getListImage().get(0).getUrl()).into(circleImage);
+                }
+                readMessage(firebaseUser.getUid(), userId, user.getListImage().get(0).getUrl());
             }
 
             @Override
@@ -157,9 +166,8 @@ public class MessageActivity extends AppCompatActivity {
     private void sendMessage(String sender, String receiver, String message) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference refKey = reference.push();
+
         String key = refKey.getKey();
-        intent = getIntent();
-        String userId = intent.getStringExtra("userId");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("id", key);
         hashMap.put("sender", sender);
@@ -168,22 +176,22 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("isseen", false);
         reference.child("Chats").push().setValue(hashMap);
 
-        DatabaseReference chatRef=FirebaseDatabase.getInstance().getReference("ChatList")
-                .child(firebaseUser.getUid())
-                .child(userId);
-        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-                    chatRef.child("id").setValue(userId);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
+//        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
+//                .child(sender)
+//                .child(receiver);
+//        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+//                if (!dataSnapshot.exists()) {
+//                    chatRef.child("id").setValue(receiver);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     private void readMessage(String myId, String userId, String imageURL) {
@@ -212,13 +220,7 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    private void selectImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select image"), PICK_IMAGE);
 
-    }
 
 
     @Override

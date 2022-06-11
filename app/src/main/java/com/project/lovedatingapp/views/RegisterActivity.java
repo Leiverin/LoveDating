@@ -51,9 +51,13 @@ public class RegisterActivity extends AppCompatActivity {
     private void register() {
         String email = binding.edEmail.getText().toString();
         String password = binding.edPass.getText().toString();
+        int age = Integer.parseInt(binding.edAge.getText().toString());
         String username = binding.edUser.getText().toString();
         //
-
+        if (binding.rdGroup.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Gender cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (username.isEmpty()) {
             binding.edUser.setError("Username is required!");
             binding.edUser.requestFocus();
@@ -65,23 +69,16 @@ public class RegisterActivity extends AppCompatActivity {
 
             return;
         }
-        if(password.isEmpty()){
+        if (password.isEmpty()) {
             binding.edPass.setError("Password is required!");
             binding.edPass.requestFocus();
             return;
         }
-        if(binding.edAge.getText().toString().equals("")){
-            binding.edPass.setError("Age is required!");
-            binding.edPass.requestFocus();
-            return;
-        }
-        int age = Integer.parseInt(binding.edAge.getText().toString());
         if (age == 0) {
-            binding.edAge.setError("Username is required!");
+            binding.edAge.setError("Age is required!");
             binding.edAge.requestFocus();
             return;
-        }
-       else if (password.length() < 6) {
+        } else if (password.length() < 6) {
             binding.edPass.setError("Min password length  must be 6 characters!");
             binding.edPass.requestFocus();
             return;
@@ -91,13 +88,19 @@ public class RegisterActivity extends AppCompatActivity {
             binding.edEmail.requestFocus();
             return;
         }
+        String gender;
+        if(binding.rdBoy.isChecked()){
+            gender=binding.rdBoy.getText().toString();
+        }else {
+            gender=binding.rdGirl.getText().toString();
+        }
+
         //
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
 
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             String userId = firebaseUser.getUid();
@@ -110,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                             map.put("password", password);
                             map.put("age", age);
                             map.put("search", username.toLowerCase());
-                            map.put("images", "");
+                            map.put("gender", gender);
 
                             reference.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

@@ -42,17 +42,11 @@ public class SplashActivity extends AppCompatActivity {
                     Thread.sleep(3000);
                     if (firebaseUser != null) {
                         reference = FirebaseDatabase.getInstance().getReference("Users");
-                        reference.child("images").addValueEventListener(new ValueEventListener() {
+                        reference.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                                    Log.d("zzzzzzz", new Gson().toJson(snapshot));
-//                                    User user = snapshot.getValue(User.class);
-//                                    assert user != null;
-//                                    if (user.getId().equals(firebaseUser.getUid())) {
-//                                        Common.user = user;
-//                                    }
-                                }
+                                User user = dataSnapshot.getValue(User.class);
+                                Common.user = user;
                             }
 
                             @Override

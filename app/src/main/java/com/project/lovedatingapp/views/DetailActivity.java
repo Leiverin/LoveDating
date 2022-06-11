@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_ID_USER = "EXTRA_ID";
     public static final String EXTRA_URL_IMAGE = "EXTRA_URL_IMAGE";
+
     private ActivityDetailBinding binding;
     private DatabaseReference reference;
     @Override

@@ -30,9 +30,11 @@ public class HomeViewModel extends ViewModel {
     private List<Image> mListImage;
     private List<User> mListUser;
     private MutableLiveData<List<User>> mListUserLiveData;
+    private MutableLiveData<User> mUserLiveData;
 
     public HomeViewModel() {
         mListUserLiveData = new MutableLiveData<>();
+        mUserLiveData = new MutableLiveData<>();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         mListImage = new ArrayList<>();
@@ -78,7 +80,26 @@ public class HomeViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<User>> getUser() {
+    public void callToGetUserCurrent(){
+        reference.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                mUserLiveData.postValue(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                mUserLiveData.postValue(null);
+            }
+        });
+    }
+
+    public LiveData<List<User>> getListUser() {
         return mListUserLiveData;
+    }
+
+    public LiveData<User> getUserCurrent(){
+        return mUserLiveData;
     }
 }

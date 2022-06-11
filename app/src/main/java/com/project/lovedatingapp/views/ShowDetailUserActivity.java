@@ -20,8 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.project.lovedatingapp.R;
+import com.project.lovedatingapp.adapters.ViewPager2Adapter;
 import com.project.lovedatingapp.models.User;
-import com.project.lovedatingapp.ui.me.adapter.ViewPager2Adapter;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -38,8 +38,10 @@ public class ShowDetailUserActivity extends AppCompatActivity {
     private ImageView btnMessage;
     private TextView txtFullname;
     private TextView txtAge;
+    private TextView txtGender;
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
+    public static final String KEY_SHOW="KEY_SHOW";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +52,41 @@ public class ShowDetailUserActivity extends AppCompatActivity {
         btnMessage = findViewById(R.id.btnMessage);
         txtFullname = findViewById(R.id.txtFullname);
         txtAge = findViewById(R.id.txtAge);
+        txtGender = findViewById(R.id.txtGender);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager2 = findViewById(R.id.viewPager2);
+
+        intent = getIntent();
+        String userId = intent.getStringExtra(KEY_SHOW);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                String upperString = user.getUsername().substring(0, 1).toUpperCase() + user.getUsername().substring(1).toLowerCase();
+                txtFullname.setText(upperString);
+                txtAge.setText(","+user.getAge());
+                txtGender.setText(","+user.getGender());
+
+//                if(user.getImageURL().equals("default")){
+//                    circleImage.setImageResource(R.mipmap.ic_launcher);
+//                }else {
+//                    Gilde.with(MessageActivity.this).load(user.getImageURL()).into(circleImage);
+//                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
 
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userId = intent.getStringExtra("userId");
                 Intent intent = new Intent(ShowDetailUserActivity.this, MessageActivity.class);
-                intent.putExtra("userId", userId);
+                intent.putExtra(MessageActivity.KEY, userId);
                 startActivity(intent);
             }
         });
@@ -73,28 +101,7 @@ public class ShowDetailUserActivity extends AppCompatActivity {
             tab.setIcon(tabImage[position]);
         }).attach();
 
-        intent = getIntent();
-        String userId = intent.getStringExtra("userId");
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                txtFullname.setText(user.getUsername());
-                txtAge.setText(user.getAge()+"");
-//                if(user.getImageURL().equals("default")){
-//                    circleImage.setImageResource(R.mipmap.ic_launcher);
-//                }else {
-//                    Gilde.with(MessageActivity.this).load(user.getImageURL()).into(circleImage);
-//                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
 
     }
 

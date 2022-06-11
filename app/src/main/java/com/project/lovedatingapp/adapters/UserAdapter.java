@@ -18,12 +18,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import com.project.lovedatingapp.models.User;
 import com.project.lovedatingapp.views.MessageActivity;
-import com.project.lovedatingapp.models.Chat;
 import com.project.lovedatingapp.R;
-import com.squareup.picasso.Picasso;
+import com.project.lovedatingapp.interfaces.OnEventShowUser;
+import com.project.lovedatingapp.models.Chat;
+import com.project.lovedatingapp.models.User;
+
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,11 +35,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     private Context context;
     private List<User> list;
     String theLastMessage;
+    private OnEventShowUser onEventShowUser;
 
-    public UserAdapter(Context context, List<User> list) {
+    public UserAdapter(Context context, List<User> list,OnEventShowUser onEventShowUser) {
         this.context = context;
         this.list = list;
-
+        this.onEventShowUser=onEventShowUser;
+        notifyDataSetChanged();
+    }
+    public void setList(List<User> list){
+        this.list=list;
+        notifyDataSetChanged();
     }
 
 
@@ -48,7 +54,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user, parent, false);
-        UserViewHolder userViewHolder=new UserViewHolder(view);
+        UserViewHolder userViewHolder = new UserViewHolder(view);
         return userViewHolder;
     }
 
@@ -65,9 +71,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, MessageActivity.class);
-                intent.putExtra("userId", user.getId());
-                context.startActivity(intent);
+                onEventShowUser.onClickShowUser(user);
             }
         });
     }
@@ -87,8 +91,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         private TextView lastMessage;
         private TextView unseenMassage;
 
-
-
         public UserViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             rootLayout = itemView.findViewById(R.id.rootLayout);
@@ -106,18 +108,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot:dataSnapshot.getChildren()){
-                    Chat chat=snapshot.getValue(Chat.class);
-                    if(chat.getReceiver().equals(firebaseUser.getUid())&&chat.getSender().equals(userId)||
-                    chat.getReceiver().equals(userId)&&chat.getSender().equals(firebaseUser.getUid())){
-                        theLastMessage=chat.getMessage();
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if(chat.getReceiver().equals(firebaseUser.getUid()) &&
+                            chat.getSender().equals(userId) ||
+                            chat.getReceiver().equals(userId) &&
+                                    chat.getSender().equals(firebaseUser.getUid())){
+                        theLastMessage = chat.getMessage();
                     }
                 }
+
                 switch (theLastMessage){
                     case "default":
                         lastMessage.setText("No message");
                         break;
                     default:
                         lastMessage.setText(theLastMessage);
+                        break;
                 }
                 theLastMessage="default";
             }

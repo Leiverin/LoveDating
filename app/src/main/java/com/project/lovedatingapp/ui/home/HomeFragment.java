@@ -53,13 +53,20 @@ public class HomeFragment extends Fragment implements IOnClickCard {
         View root = binding.getRoot();
 
 
-        homeViewModel.getUser().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+        homeViewModel.getListUser().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
                 if(users != null){
                     mListUser = users;
                     swipeAdapter.setListUser(users);
                 }
+            }
+        });
+
+        homeViewModel.getUserCurrent().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                Common.user = user;
             }
         });
 
@@ -125,6 +132,8 @@ public class HomeFragment extends Fragment implements IOnClickCard {
         });
 
         homeViewModel.callToGetImage();
+        homeViewModel.callToGetUserCurrent();
+
         return root;
     }
 
@@ -136,7 +145,7 @@ public class HomeFragment extends Fragment implements IOnClickCard {
 
     @Override
     public void onClickBtnLike(User user) {
-
+        kldCard.onButtonClick(true);
     }
 
     @Override
