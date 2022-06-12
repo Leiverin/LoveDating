@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment implements IOnClickCard {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        String cancelCard = (getActivity()).getIntent().getStringExtra(EXTRA_CANCEL_CARD);
+//        String cancelCard = (getActivity()).getIntent().getStringExtra(EXTRA_CANCEL_CARD);
 
         homeViewModel.getListUser().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment implements IOnClickCard {
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra(DetailActivity.EXTRA_ID_USER, mListUser.get(i+1).getId());
                 intent.putExtra(DetailActivity.EXTRA_URL_IMAGE, mListUser.get(i+1).getListImage().get(0).getUrl());
-                intent.putExtra(DetailActivity.EXTRA_CHECK_HOME, "Home");
+//                intent.putExtra(DetailActivity.EXTRA_CHECK_HOME, "Home");
                 startActivity(intent);
             }
 
@@ -140,14 +140,15 @@ public class HomeFragment extends Fragment implements IOnClickCard {
         return root;
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
+    @Override
+    public void onResume() {
+        super.onResume();
 //        String cancelCard = (getActivity()).getIntent().getStringExtra(EXTRA_CANCEL_CARD);
 //        if(cancelCard != null){
 //            kldCard.onButtonClick(false);
+//
 //        }
-//    }
+    }
 
     @Override
     public void onDestroyView() {

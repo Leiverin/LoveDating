@@ -1,12 +1,9 @@
 package com.project.lovedatingapp.ui.chat;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +19,10 @@ import com.google.firebase.database.Query;
 
 
 import com.google.gson.Gson;
-import com.project.lovedatingapp.interfaces.IOnClickUserWithImage;
+import com.project.lovedatingapp.models.ChatList;
 import com.project.lovedatingapp.models.Image;
 import com.project.lovedatingapp.models.UserCategory;
 import com.project.lovedatingapp.views.MessageActivity;
-import com.project.lovedatingapp.views.ShowDetailUserActivity;
-import com.project.lovedatingapp.utils.Common;
 import com.project.lovedatingapp.adapters.UserAdapter;
 import com.project.lovedatingapp.databinding.FragmentChatBinding;
 
@@ -43,7 +38,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import com.project.lovedatingapp.interfaces.OnEventShowUser;
 import com.project.lovedatingapp.models.Chat;
-import com.project.lovedatingapp.models.ChatList;
 import com.project.lovedatingapp.models.User;
 
 import org.jetbrains.annotations.NotNull;
@@ -60,10 +54,8 @@ public class ChatFragment extends Fragment {
     private List<UserCategory> mUser;
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
-    private List<String> userList;
+    private List<ChatList> userList;
     private List<Image> mListImage;
-    private boolean checkSender = false;
-    private boolean checkReceiver = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -94,42 +86,14 @@ public class ChatFragment extends Fragment {
 
         binding.rvChat.setAdapter(adapter);
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference = FirebaseDatabase.getInstance().getReference("ChatList").child(firebaseUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 userList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    checkSender = false;
-                    checkReceiver = false;
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if(userList.size() == 0){
-                        if (chat.getSender().equals(firebaseUser.getUid())) {
-                            userList.add(chat.getReceiver());
-                        }
-                        if (chat.getReceiver().equals(firebaseUser.getUid())){
-                            userList.add(chat.getSender());
-                        }
-                    }else{
-                        for(int i = 0; i < userList.size(); i++){
-                            if(chat.getSender().equals(firebaseUser.getUid())){
-                                if(userList.get(i).equals(chat.getReceiver())){
-                                    checkReceiver = true;
-                                }
-                            }
-                            if (chat.getReceiver().equals(firebaseUser.getUid())){
-                                if(userList.get(i).equals(chat.getSender())){
-                                    checkSender = true;
-                                }
-                            }
-                        }
-                        if(!checkSender && !chat.getSender().equals(firebaseUser.getUid())){
-                            userList.add(chat.getSender());
-                        }
-                        if(!checkReceiver && !chat.getReceiver().equals(firebaseUser.getUid())){
-                            userList.add(chat.getReceiver());
-                        }
-                    }
+                    ChatList chatList = snapshot.getValue(ChatList.class);
+                    userList.add(chatList);
                 }
                 readChats();
             }
@@ -139,9 +103,6 @@ public class ChatFragment extends Fragment {
 
             }
         });
-
-
-
         binding.edSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -166,8 +127,6 @@ public class ChatFragment extends Fragment {
         return root;
     }
 
-    private boolean checkExist = false;
-
     private void readChats() {
         mUser = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -176,60 +135,28 @@ public class ChatFragment extends Fragment {
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 mUser.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    checkExist = false;
                     User user = snapshot.getValue(User.class);
-                    for (String id : userList) {
-                        if (user.getId().equals(id)) {
-                            if (mUser.size() != 0) {
-                                for (int i = 0; i < mUser.size(); i++) {
-                                    User user1 = mUser.get(i).getUser();
-                                    if (user1.getId().equals(user.getId())) {
-                                        checkExist = true;
-                                    }
-                                }
-                                if(!checkExist){
-                                    reference.child(user.getId()).child("images").addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot snapshot) {
-                                            mListImage = new ArrayList<>();
-                                            for (DataSnapshot dsChild : snapshot.getChildren()) {
-                                                HashMap<String,Object> map = (HashMap<String, Object>) dsChild.getValue();
-                                                String idImg = (String) map.get("id");
-                                                String urlImg = (String) map.get("imageURL");
-                                                mListImage.add(new Image(idImg, urlImg));
+                    for (ChatList chatList : userList) {
+                        if (user.getId().equals(chatList.getId())) {
+                            reference.child(user.getId()).child("images").addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot snapshot) {
+                                                mListImage = new ArrayList<>();
+                                                for (DataSnapshot dsChild : snapshot.getChildren()) {
+                                                    HashMap<String,Object> map = (HashMap<String, Object>) dsChild.getValue();
+                                                    String idImg = (String) map.get("id");
+                                                    String urlImg = (String) map.get("imageURL");
+                                                    mListImage.add(new Image(idImg, urlImg));
+                                                }
+                                                mUser.add(new UserCategory(user, mListImage));
+                                                adapter.setList(mUser);
                                             }
-                                            mUser.add(new UserCategory(user, mListImage));
-                                            adapter.setList(mUser);
-                                        }
 
-                                        @Override
-                                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                                            @Override
+                                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                                        }
-                                    });
-                                }
-                            } else {
-                                Log.d("zzzzzz", "onDataChange: ");
-                                reference.child(user.getId()).child("images").addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
-                                        mListImage = new ArrayList<>();
-                                        for (DataSnapshot dsChild : snapshot.getChildren()) {
-                                            HashMap<String,Object> map = (HashMap<String, Object>) dsChild.getValue();
-                                            String idImg = (String) map.get("id");
-                                            String urlImg = (String) map.get("imageURL");
-                                            mListImage.add(new Image(idImg, urlImg));
-                                        }
-                                        mUser.add(new UserCategory(user, mListImage));
-                                        adapter.setList(mUser);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                                    }
-                                });
-                            }
+                                            }
+                                        });
                         }
                     }
                 }

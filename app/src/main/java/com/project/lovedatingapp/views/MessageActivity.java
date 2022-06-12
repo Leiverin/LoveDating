@@ -56,9 +56,9 @@ public class MessageActivity extends AppCompatActivity {
     private Toolbar toobar;
     private CircleImageView circleImage;
     private TextView txtUsername;
-    FirebaseUser firebaseUser;
-    DatabaseReference databaseReference;
-    Intent intent;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference databaseReference;
+    private Intent intent;
     private RecyclerView rvSend;
     private RelativeLayout bottom;
     private EditText textSend;
@@ -179,22 +179,22 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("isseen", false);
         reference.child("Chats").push().setValue(hashMap);
 
-//        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
-//                .child(sender)
-//                .child(receiver);
-//        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-//                if (!dataSnapshot.exists()) {
-//                    chatRef.child("id").setValue(receiver);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//            }
-//        });
+        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
+                .child(firebaseUser.getUid())
+                .child(userId);
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    chatRef.child("id").setValue(userId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void readMessage(String myId, String userId, String imageURL) {

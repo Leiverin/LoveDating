@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_ID_USER = "EXTRA_ID";
     public static final String EXTRA_URL_IMAGE = "EXTRA_URL_IMAGE";
-    public static final String EXTRA_CHECK_HOME = "EXTRA_CHECK_HOME";
+//    public static final String EXTRA_CHECK_HOME = "EXTRA_CHECK_HOME";
 
     private ActivityDetailBinding binding;
     private DatabaseReference reference;
@@ -39,7 +39,9 @@ public class DetailActivity extends AppCompatActivity {
         String id = getIntent().getStringExtra(EXTRA_ID_USER);
         String url = getIntent().getStringExtra(EXTRA_URL_IMAGE);
         Glide.with(this).load(url).into(binding.imgUser);
-        String checkFromHome = getIntent().getStringExtra(EXTRA_CHECK_HOME);
+
+//        String checkFromHome = getIntent().getStringExtra(EXTRA_CHECK_HOME);
+
         reference = FirebaseDatabase.getInstance().getReference("Users").child(id);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,9 +69,10 @@ public class DetailActivity extends AppCompatActivity {
         binding.imbDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Log.d("zzzzz", checkFromHome+"");
+//                if(checkFromHome != null){
 //                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
 //                intent.putExtra(HomeFragment.EXTRA_CANCEL_CARD, "Cancel Card");
-//                if(checkFromHome != null){
 //                    startActivity(intent);
 //                }
             }
