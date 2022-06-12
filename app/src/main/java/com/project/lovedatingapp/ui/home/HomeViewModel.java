@@ -59,7 +59,7 @@ public class HomeViewModel extends ViewModel {
                                     String idImg = (String) map.get("id");
                                     String urlImg = (String) map.get("imageURL");
                                     mListImage.add(new Image(idImg, urlImg));
-                                }
+                            }
                                 mListUser.add(new User(id, mListImage));
                                 mListUserLiveData.postValue(mListUser);
                             }

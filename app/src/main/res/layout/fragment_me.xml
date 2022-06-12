@@ -41,6 +41,7 @@
                 android:layout_height="120dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_avatar"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="10dp"
@@ -158,6 +159,7 @@
                         android:textSize="15dp" />
                 </LinearLayout>
             </LinearLayout>
+
             <com.google.android.material.tabs.TabLayout
                 app:tabSelectedTextColor="@color/black"
                 android:id="@+id/tabLayout"

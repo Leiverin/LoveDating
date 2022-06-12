@@ -66,9 +66,12 @@ public class MessageActivity extends AppCompatActivity {
     private ImageButton btnImage;
     private List<Chat> list;
     private MessageAdapter adapter;
-    ValueEventListener seenListener;
-    String userId;
+    private ValueEventListener seenListener;
+    private String userId;
+    private String urlImageUser;
     public static final String KEY="GET";
+    public static final String KEY_URL="KEY_URL";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +99,14 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-
         rvSend.setHasFixedSize(true);
         intent = getIntent();
         userId= intent.getStringExtra(KEY);
+        urlImageUser = intent.getStringExtra(KEY_URL);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        adapter = new MessageAdapter(MessageActivity.this, list, urlImageUser);
+        rvSend.setAdapter(adapter);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,20 +122,16 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-
-
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 txtUsername.setText(user.getUsername());
-                if(user.getListImage().get(0).getUrl().equals("default")){
-                    circleImage.setImageResource(R.mipmap.ic_launcher);
-                }else {
-                    Glide.with(MessageActivity.this).load(user.getListImage().get(0).getUrl()).into(circleImage);
+                if(urlImageUser != null){
+                    Glide.with(MessageActivity.this).load(urlImageUser).into(circleImage);
                 }
-                readMessage(firebaseUser.getUid(), userId, user.getListImage().get(0).getUrl());
+                readMessage(firebaseUser.getUid(), userId, urlImageUser);
             }
 
             @Override
@@ -137,6 +139,7 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+
         seenMessage(userId);
     }
 
@@ -207,9 +210,7 @@ public class MessageActivity extends AppCompatActivity {
                             chat.getReceiver().equals(userId) && chat.getSender().equals(myId)) {
                         list.add(chat);
                     }
-                    adapter = new MessageAdapter(MessageActivity.this, list, imageURL);
-                    rvSend.setAdapter(adapter);
-
+                    adapter.setListAdapter(list, imageURL);
                 }
             }
 

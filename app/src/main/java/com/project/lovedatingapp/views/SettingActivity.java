@@ -36,10 +36,12 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 firebaseAuth.signOut();
-                startActivity(new Intent(SettingActivity.this, LoginActivity.class));
                 Common.user = null;
-                finish();
+                Common.mListUserCategory = null;
                 MainActivity.mainActivity.finish();
+                finish();
+                startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+
             }
         });
 

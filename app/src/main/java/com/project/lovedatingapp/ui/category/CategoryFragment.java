@@ -1,5 +1,6 @@
 package com.project.lovedatingapp.ui.category;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,22 +25,31 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import com.google.gson.Gson;
+import com.project.lovedatingapp.interfaces.IOnClickUserWithImage;
+import com.project.lovedatingapp.interfaces.OnEventShowUser;
+import com.project.lovedatingapp.models.Image;
+import com.project.lovedatingapp.models.UserCategory;
 import com.project.lovedatingapp.utils.Common;
 import com.project.lovedatingapp.adapters.UserAdapterCategory;
 import com.project.lovedatingapp.databinding.FragmentCategoryBinding;
 import com.project.lovedatingapp.models.User;
+import com.project.lovedatingapp.views.DetailActivity;
+import com.project.lovedatingapp.views.ShowDetailUserActivity;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CategoryFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
     private FragmentCategoryBinding binding;
-    private List<User> list;
+    private List<UserCategory> list;
     private UserAdapterCategory adapter;
     private FirebaseUser firebaseUser;
+    private List<Image> mListImage;
+    private DatabaseReference reference;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,7 +67,19 @@ public class CategoryFragment extends Fragment {
         });
 
         list = new ArrayList<>();
+        mListImage = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
 
+        adapter = new UserAdapterCategory(getActivity(), list, new IOnClickUserWithImage() {
+            @Override
+            public void onClick(UserCategory user, String url) {
+                Intent intent = new Intent(getContext(), DetailActivity.class);
+                intent.putExtra(DetailActivity.EXTRA_ID_USER, user.getUser().getId());
+                intent.putExtra(DetailActivity.EXTRA_URL_IMAGE, url);
+                getActivity().startActivity(intent);
+            }
+        });
+        binding.rvCategory.setAdapter(adapter);
         readUser();
 
         binding.edSearch.addTextChangedListener(new TextWatcher() {
@@ -68,7 +90,11 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchUser(charSequence.toString().toLowerCase());
+                if(i == 0 && i2 == 0){
+
+                }else{
+                    searchUser(charSequence.toString().toLowerCase());
+                }
             }
 
             @Override
@@ -93,12 +119,29 @@ public class CategoryFragment extends Fragment {
                     assert user != null;
                     if (!user.getId().equals(firebaseUser.getUid())) {
                         if (user.getAge() <= (Common.user.getAge() + 2) && user.getAge() >= (Common.user.getAge() - 2)){
-                            list.add(user);
+                            reference.child(user.getId()).child("images").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot snapshot) {
+                                    mListImage = new ArrayList<>();
+                                    for (DataSnapshot dsChild : snapshot.getChildren()) {
+                                        HashMap<String,Object> map = (HashMap<String, Object>) dsChild.getValue();
+                                        String idImg = (String) map.get("id");
+                                        String urlImg = (String) map.get("imageURL");
+                                        mListImage.add(new Image(idImg, urlImg));
+                                    }
+                                    list.add(new UserCategory(user, mListImage));
+                                    adapter.setList(list);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                }
+                            });
                         }
                     }
                 }
-                adapter = new UserAdapterCategory(getContext(), list);
-                binding.rvCategory.setAdapter(adapter);
+                adapter.setList(list);
             }
 
             @Override
@@ -110,7 +153,6 @@ public class CategoryFragment extends Fragment {
 
     private void readUser() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
@@ -120,13 +162,28 @@ public class CategoryFragment extends Fragment {
                     assert user != null;
                     if (!user.getId().equals(firebaseUser.getUid())) {
                         if (user.getAge() <= (Common.user.getAge() + 2) && user.getAge() >= (Common.user.getAge() - 2)){
-                            list.add(user);
+                            reference.child(user.getId()).child("images").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot snapshot) {
+                                    mListImage = new ArrayList<>();
+                                    for (DataSnapshot dsChild : snapshot.getChildren()) {
+                                        HashMap<String,Object> map = (HashMap<String, Object>) dsChild.getValue();
+                                        String idImg = (String) map.get("id");
+                                        String urlImg = (String) map.get("imageURL");
+                                        mListImage.add(new Image(idImg, urlImg));
+                                    }
+                                    list.add(new UserCategory(user, mListImage));
+                                    adapter.setList(list);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                }
+                            });
                         }
                     }
                 }
-
-                adapter = new UserAdapterCategory(getContext(), list);
-                binding.rvCategory.setAdapter(adapter);
             }
 
             @Override

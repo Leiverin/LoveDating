@@ -46,6 +46,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         this.imageURL = imageURL;
     }
 
+    public void setListAdapter(List<Chat> list, String imageURL){
+        this.list = list;
+        this.imageURL = imageURL;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @NotNull
     @Override
@@ -62,15 +68,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MessageAdapter.MessageViewHolder holder, int position) {
-         Chat chat=list.get(position);
+         Chat chat = list.get(position);
          holder.txtShowMessage.setText(chat.getMessage());
-         if(imageURL.equals("default")){
-             holder.circleImage.setImageResource(R.mipmap.ic_launcher);
-         }else {
+         if(imageURL != null){
              Glide.with(context).load(imageURL).into(holder.circleImage);
          }
         //check for last message
-        holder.item_chat.setOnLongClickListener(new View.OnLongClickListener() {
+         holder.item_chat.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 final CharSequence[] items = {"Delete", "Xem trang cá nhân"};
@@ -106,6 +110,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 return true;
             }
         });
+
         if(position==list.size()-1){
             if(chat.isIsSeen()){
                 holder.txtSeen.setText("Seen");

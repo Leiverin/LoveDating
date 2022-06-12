@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.project.lovedatingapp.MainActivity;
 import com.project.lovedatingapp.adapters.SwipeAdapter;
 import com.project.lovedatingapp.databinding.FragmentHomeBinding;
 import com.project.lovedatingapp.interfaces.IOnClickCard;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements IOnClickCard {
+    public static final String EXTRA_CANCEL_CARD = "EXTRA_CANCEL_CARD";
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
@@ -51,7 +53,7 @@ public class HomeFragment extends Fragment implements IOnClickCard {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        String cancelCard = (getActivity()).getIntent().getStringExtra(EXTRA_CANCEL_CARD);
 
         homeViewModel.getListUser().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
@@ -73,7 +75,6 @@ public class HomeFragment extends Fragment implements IOnClickCard {
 
         mListUser = new ArrayList<>();
         kldCard = binding.kldCard;
-
 
         swipeAdapter = new SwipeAdapter(getContext(), mListUser, this);
         kldCard.setAdapter(swipeAdapter);
@@ -113,6 +114,7 @@ public class HomeFragment extends Fragment implements IOnClickCard {
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra(DetailActivity.EXTRA_ID_USER, mListUser.get(i+1).getId());
                 intent.putExtra(DetailActivity.EXTRA_URL_IMAGE, mListUser.get(i+1).getListImage().get(0).getUrl());
+                intent.putExtra(DetailActivity.EXTRA_CHECK_HOME, "Home");
                 startActivity(intent);
             }
 
@@ -137,6 +139,15 @@ public class HomeFragment extends Fragment implements IOnClickCard {
 
         return root;
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        String cancelCard = (getActivity()).getIntent().getStringExtra(EXTRA_CANCEL_CARD);
+//        if(cancelCard != null){
+//            kldCard.onButtonClick(false);
+//        }
+//    }
 
     @Override
     public void onDestroyView() {

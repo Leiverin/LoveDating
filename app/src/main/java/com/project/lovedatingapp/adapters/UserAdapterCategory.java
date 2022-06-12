@@ -16,8 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.project.lovedatingapp.interfaces.IOnClickUserWithImage;
+import com.project.lovedatingapp.interfaces.OnEventShowUser;
 import com.project.lovedatingapp.models.User;
 import com.project.lovedatingapp.R;
+import com.project.lovedatingapp.models.UserCategory;
 import com.project.lovedatingapp.utils.Common;
 import com.project.lovedatingapp.views.ShowDetailUserActivity;
 import com.squareup.picasso.Picasso;
@@ -30,13 +33,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserAdapterCategory extends RecyclerView.Adapter<UserAdapterCategory.UserViewHolder> {
     private Context context;
-    private List<User> list;
+    private List<UserCategory> list;
+    private IOnClickUserWithImage onClickUserWithImage;
 
-    public UserAdapterCategory(Context context, List<User> list) {
+    public UserAdapterCategory(Context context, List<UserCategory> list, IOnClickUserWithImage onClickUserWithImage) {
         this.context = context;
         this.list = list;
+        this.onClickUserWithImage = onClickUserWithImage;
+        notifyDataSetChanged();
     }
 
+    public void setList(List<UserCategory> list){
+        this.list = list;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @NotNull
@@ -48,18 +58,14 @@ public class UserAdapterCategory extends RecyclerView.Adapter<UserAdapterCategor
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull UserAdapterCategory.UserViewHolder holder, int position) {
-        User user = list.get(position);
-        String upperString = user.getUsername().substring(0, 1).toUpperCase() + user.getUsername().substring(1).toLowerCase();
+        UserCategory user = list.get(position);
+        String upperString = user.getUser().getUsername().substring(0, 1).toUpperCase() + user.getUser().getUsername().substring(1).toLowerCase();
         holder.txtFullname.setText(upperString);
-        if(Common.mListUserCategory != null){
-            Glide.with(context).load(Common.mListUserCategory.get(position).getListImage().get(0).getUrl()).into(holder.profilePicc);
-        }
+        Glide.with(context).load(user.getImages().get(0).getUrl()).into(holder.profilePicc);
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, ShowDetailUserActivity.class);
-                intent.putExtra("userId", user.getId());
-                context.startActivity(intent);
+                onClickUserWithImage.onClick(user, user.getImages().get(0).getUrl());
             }
         });
     }

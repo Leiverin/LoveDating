@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.project.lovedatingapp.interfaces.IOnClickUserWithImage;
+import com.project.lovedatingapp.models.UserCategory;
+import com.project.lovedatingapp.utils.Common;
 import com.project.lovedatingapp.views.MessageActivity;
 import com.project.lovedatingapp.R;
 import com.project.lovedatingapp.interfaces.OnEventShowUser;
@@ -33,19 +37,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
     private Context context;
-    private List<User> list;
+    private List<UserCategory> list;
     String theLastMessage;
     private OnEventShowUser onEventShowUser;
 
-    public UserAdapter(Context context, List<User> list,OnEventShowUser onEventShowUser) {
+    public UserAdapter(Context context, List<UserCategory> list,OnEventShowUser onEventShowUser) {
         this.context = context;
         this.list = list;
-        this.onEventShowUser=onEventShowUser;
-        notifyDataSetChanged();
+        this.onEventShowUser = onEventShowUser;
     }
-    public void setList(List<User> list){
+    public void setList(List<UserCategory> list){
         this.list=list;
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
 
@@ -60,14 +63,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull UserAdapter.UserViewHolder holder, int position) {
-        User user = list.get(position);
-        String upperString = user.getUsername().substring(0, 1).toUpperCase() + user.getUsername().substring(1).toLowerCase();
+        UserCategory user = list.get(position);
+        String upperString = user.getUser().getUsername().substring(0, 1).toUpperCase() + user.getUser().getUsername().substring(1).toLowerCase();
         holder.txtFullname.setText(upperString);
-//        Picasso.get().load(user.getImageURL())
-//                .placeholder(R.drawable.user)
-//                .error(R.drawable.ic_launcher_background)
-//                .into(holder.profilePicc);
-        lastMessage(user.getId(),holder.lastMessage);
+        Glide.with(context).load(user.getImages().get(0).getUrl()).into(holder.profilePicc);
+        lastMessage(user.getUser().getId(),holder.lastMessage);
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
